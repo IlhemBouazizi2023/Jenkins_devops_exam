@@ -11,10 +11,13 @@ pipeline {
     }
     
     stage('Deploy to Kubernetes') {
+        environment
+        {
+        kubeconfig = credentials("config") // we retrieve  kubeconfig from secret file called config saved on jenkins
+        }
       steps {
         script {
-          def kubeconfig = readFile('~/.kube/config')
-          def manifest = readFile('~/manifest_v1.yaml')
+          def manifest = readFile('k3s/manifest_v1.yaml')
           
           // Configure Kubernetes CLI
           sh "echo '${kubeconfig}' > kubeconfig.yaml"
